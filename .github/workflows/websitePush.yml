@@ -1,0 +1,31 @@
+name: Pushing website on S3
+
+on:
+   workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ VARS.AWS_REGION }}
+
+      - name: Unzip and Upload to S3
+        run: aws s3 sync FrontEnd s3://my-static-website-1996/
+        
