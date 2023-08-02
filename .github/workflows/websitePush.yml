@@ -31,6 +31,7 @@ jobs:
       #   env:
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
@@ -40,7 +41,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUM }}
           aws-region: ${{ VARS.AWS_REGION }}
 
       - name: Unzip and Upload to S3
